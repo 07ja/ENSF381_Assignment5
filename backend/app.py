@@ -8,7 +8,7 @@ CORS(app) # Enable CORS for all domains on all routes
 
 users = []
 
-@app.route('/Login', methods=['POST'])
+@app.route('/Signup', methods=['POST'])
 def registerUser():
     new_user = request.get_json()
     if new_user[0]['username'] == 'Test':
@@ -38,6 +38,17 @@ def registerUser():
         return jsonify({"registrationMessage": "Signup successful"})
     else:
         return jsonify({"registrationMessage": "element missing, try to input all elements needed or go to app.py change code."})
+
+
+@app.route('/Login', methods=['POST'])
+def loginUser():
+    user_input = request.get_json()
+    for user in users:
+        if user_input[0]['username'] == user['username']:
+            if user_input[0]['password'] != user['password']:
+                return jsonify({"AuthenticationMessage": "Wrong password"})
+            return jsonify({"AuthenticationMessage": "Login successful"})
+    return jsonify({"AuthenticationMessage": "User NotFound, please signup"})
 
 
 products = [
@@ -113,20 +124,12 @@ products = [
     }
 ]
 
-# @app.route ('/products', methods =['GET'])
-# @app.route ('/products/<int:product_id>', methods =['GET'])
-# def get_products ( product_id = None ) :
-#     products = load_products ()
-#     if product_id is None :
-#     # Return all products wrapped in an object with a 'products ' key
-#         return jsonify ({"products": products })
-#     else :
-#         product = next (( p for p in products if p ['id'] == product_id ) ,None )
-# # If a specific product is requested ,
-# # wrap it in an object with a 'products ' key
-# # Note : You might want to change this
-# # if you want to return a single product not wrapped in a list
-#     return jsonify ( product ) if product else (' ', 404)
+@app.route ('/products', methods =['GET'])
+def get_products () :
+    productsList = products
+    # Return all products wrapped in an object with a 'products ' key
+    return jsonify ({"products": productsList })
+
 
 # @app.route('/products/add', methods =['POST'])
 # def add_product() :
