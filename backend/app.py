@@ -1,4 +1,4 @@
-from flask import Flask , request , jsonify , send_from_directory
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS # Import CORS
 import json
 import os
@@ -8,7 +8,7 @@ CORS(app) # Enable CORS for all domains on all routes
 
 users = []
 
-@app.route('/Signup', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 def registerUser():
     new_user = request.get_json()
     if new_user[0]['username'] == 'Test':
@@ -40,14 +40,14 @@ def registerUser():
         return jsonify({"registrationMessage": "element missing, try to input all elements needed or go to app.py change code."})
 
 
-@app.route('/Login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def loginUser():
     user_input = request.get_json()
     for user in users:
         if user_input[0]['username'] == user['username']:
             if user_input[0]['password'] != user['password']:
                 return jsonify({"AuthenticationMessage": "Wrong password"})
-            return jsonify({"AuthenticationMessage": "Login successful"})
+            return jsonify({"AuthenticationMessage": "Login successful"}), redirect(url_for('product_page'))
     return jsonify({"AuthenticationMessage": "User NotFound, please signup"})
 
 
@@ -128,7 +128,7 @@ products = [
 def get_products () :
     productsList = products
     # Return all products wrapped in an object with a 'products ' key
-    return jsonify ({"products": productsList })
+    return jsonify({"products": productsList })
 
 
 # @app.route('/products/add', methods =['POST'])
