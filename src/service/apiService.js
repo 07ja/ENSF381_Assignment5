@@ -13,3 +13,11 @@ export const fetchProducts = async () => {
         throw error; // Rethrow to allow caller to handle
     }
 };
+
+export const addUser = (user) => {
+    return axios.post(`${BASE_URL}/login`, JSON.stringify(user), {
+        headers : {
+            'Content-Type': 'application/json',
+        } ,
+    }) ;
+};

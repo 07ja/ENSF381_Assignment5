@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import BrowserRouter as Router and Routes
 import Homepage from './components/Homepage';
 import Productpage from './components/Productpage';
 import LoginPage from './components/LoginPage';
+
 
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+
   );
 };
 

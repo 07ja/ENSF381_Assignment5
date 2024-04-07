@@ -5,21 +5,61 @@ Author(s)   : Jaimal Sahota (30126909), Xicheng(Justin) Wang (30191121)
 Submission  : Mar 25, 2024
 ===========================================================================*/
 
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import { addUser } from '../service/apiService.js';
+
 
 const LoginForm = ({ switchSignup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [authenticationMessage, setAuthenticationMessage] = useState('');
+  const [authenticated, setAuthenticated] = useState("");
+
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+
   const loginEnter = () => {
     if (username.trim() === '' || password.trim() === '') {
-      alert('Please fill in both Username and Password fields')
+      alert('Please fill in both Username and Password fields');
     } 
-    else {
-      console.log('Logging in...')
+    else{
+      setLoading(true);
+      const apiCall = addUser({'username':username, 'password':password});
+      apiCall.then(data => {
+        setLoading(false);
+        // console.log(data.data.authMessage);
+        setAuthenticationMessage(data.data.authMessage); 
+        setAuthenticated(data.data.authenticated); 
+        
+        // sessionStorage.setItem('authenticated', data.data.authenticated);
+        if (data.data.authenticated === true){
+          alert('Login successful');
+          console.log(data.data.authMessage);
+          // Navigate back
+          navigate('/products');
+        }
+        else{
+          alert(data.data.authMessage);
+          console.log(data.data.authMessage);
+        }
+      })
+
+      .catch(error => {
+        console.error("Error saving product:", error);
+        // setError('Failed to save product');
+        setLoading(false);
+      });
     };
   };
 
+
+
+
+
+  if (loading) return <div>Loading...</div>;
   return (
     <div>
       <h2>Login</h2>

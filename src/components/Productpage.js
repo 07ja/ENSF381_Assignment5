@@ -4,7 +4,7 @@ import ProductList from './ProductList';
 import Cart from './Cart';
 import Footer from './Footer';
 import { fetchProducts } from '../service/apiService';
-import { Link } from 'react-router-dom';
+
 
 
 const Productpage = () => {

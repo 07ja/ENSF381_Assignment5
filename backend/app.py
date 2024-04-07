@@ -8,10 +8,10 @@ CORS(app) # Enable CORS for all domains on all routes
 
 users = []
 
-@app.route('/signup', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def registerUser():
     new_user = request.get_json()
-    if new_user[0]['username'] == 'Test':
+    if new_user.get('username') == 'Test':
         print("Test mode starting...")
         print("input:")
         test_username = new_user.get('username')
@@ -22,14 +22,14 @@ def registerUser():
         if new_user.get('email'):
             test_email = new_user.get('email')
             print(test_email)
-        
+            
+        print("below is current users form:")
         for user in users:
-            print("below is current users form:")
             print(user)
 
-        return jsonify({"registrationMessage": "Test finish, if no other message shows, represents need change print method in app.py"})
+        return jsonify({"authenticated": False, "authMessage": "Test finish, if no other message shows, represents need change print method in app.py"})
     
-    if new_user.get('username') and new_user.get('password') and new_user.get('email'):
+    if "email" in new_user:
         new_username = new_user.get('username')
         for user in users:
             if user['username'] == new_username:
@@ -37,18 +37,26 @@ def registerUser():
         users.append(new_user)
         return jsonify({"registrationMessage": "Signup successful"})
     else:
-        return jsonify({"registrationMessage": "element missing, try to input all elements needed or go to app.py change code."})
+        test_username = new_user.get('username')
+        test_password = new_user.get('password')
+        print(test_username)
+        print(test_password)
+        for user in users:
+            # print(user)
+            if user['username'] == test_username and user['password'] == test_password:
+                return(jsonify({"authenticated": True, "authMessage": "Authentication successful"}))
+        return jsonify({"authenticated": False, "authMessage": "Incorrect username or password"})
 
 
-@app.route('/login', methods=['POST'])
-def loginUser():
-    user_input = request.get_json()
-    for user in users:
-        if user_input[0]['username'] == user['username']:
-            if user_input[0]['password'] != user['password']:
-                return jsonify({"AuthenticationMessage": "Wrong password"})
-            return jsonify({"AuthenticationMessage": "Login successful"}), redirect(url_for('product_page'))
-    return jsonify({"AuthenticationMessage": "User NotFound, please signup"})
+# @app.route('/login', methods=['POST'])
+# def loginUser():
+#     user_input = request.get_json()
+#     for user in users:
+#         if user_input[0]['username'] == user['username']:
+#             if user_input[0]['password'] != user['password']:
+#                 return jsonify({"AuthenticationMessage": "Wrong password"})
+#             return jsonify({"AuthenticationMessage": "Login successful"}), redirect(url_for('product_page'))
+#     return jsonify({"AuthenticationMessage": "User NotFound, please signup"})
 
 
 products = [
