@@ -20,6 +20,10 @@ const LoginForm = ({ switchSignup }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    localStorage.setItem('isAuthenticated', 'false'); 
+  }, []);
+  
   const loginEnter = () => {
     if (username.trim() === '' || password.trim() === '') {
       setError('Please fill in both Username and Password fields');
@@ -37,6 +41,7 @@ const LoginForm = ({ switchSignup }) => {
         if (data.data.authenticated === true){
           alert('Login successful');
           console.log(data.data.authMessage);
+          localStorage.setItem('isAuthenticated', 'true');
           // Navigate back
           navigate('/products');
         }
