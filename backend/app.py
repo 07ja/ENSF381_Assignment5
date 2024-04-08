@@ -27,7 +27,7 @@ def registerUser():
         for user in users:
             print(user)
 
-        return jsonify({"authenticated": False, "authMessage": "Test finish, if no other message shows, represents need change print method in app.py"})
+        return jsonify({"authenticated": False, "authMessage": "Welcome use test mode, current users' form has been post in backend command."})
     
     if "email" in new_user:
         new_username = new_user.get('username')

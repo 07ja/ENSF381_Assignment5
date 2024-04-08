@@ -24,8 +24,9 @@ const SignupForm = ({ switchLogin }) => {
       setError('Invalid email format');
     } else {
       try {
-        await addUser({username, password, email});
-        console.log('Signing up...')  
+        const response = await addUser({username, password, email});
+        alert(response.data.registrationMessage);
+        console.log('Signing up...');  
       } catch (error) {
         console.log('error signing up', error);
       }
