@@ -6,19 +6,29 @@ Submission  : Mar 25, 2024
 ===========================================================================*/
 
 import React, { useState } from 'react';
+import { addUser } from '../service/apiService.js';
 
 const SignupForm = ({ switchLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
-  const signupEnter = () => {
+  const signupEnter = async () => {
     if (username.trim() === '' || password.trim() === '' || confirmPassword.trim() === '' || email.trim() === '') {
-      alert('Please fill in all fields')
-    } 
-    else {
-      console.log('Signing up...')
+      setError('Please fill in all fields')
+    } else if (password !== confirmPassword) {
+      setError('Passwords do not match');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Invalid email format');
+    } else {
+      try {
+        await addUser({username, password, email});
+        console.log('Signing up...')  
+      } catch (error) {
+        console.log('error signing up', error);
+      }
     };
   };
 
@@ -61,6 +71,7 @@ const SignupForm = ({ switchLogin }) => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <div>
         <button onClick={signupEnter}>Signup</button>
       </div>

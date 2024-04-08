@@ -13,17 +13,16 @@ import { addUser } from '../service/apiService.js';
 const LoginForm = ({ switchSignup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [authenticationMessage, setAuthenticationMessage] = useState('');
   const [authenticated, setAuthenticated] = useState("");
-
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
   const loginEnter = () => {
     if (username.trim() === '' || password.trim() === '') {
-      alert('Please fill in both Username and Password fields');
+      setError('Please fill in both Username and Password fields');
     } 
     else{
       setLoading(true);
@@ -81,6 +80,7 @@ const LoginForm = ({ switchSignup }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <div>
         <button onClick={loginEnter}>Login</button>
       </div>
